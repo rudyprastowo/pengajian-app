@@ -48,9 +48,8 @@ def run_query(query, params=(), is_select=False):
 # ==========================================
 # KONFIGURASI HALAMAN UTAMA
 # ==========================================
-st.set_page_config(page_title="Sistem Pengajian Kelompok", layout="wide")
-st.title("🕌 Sistem Informasi & Pengelolaan Pengajian")
-st.subheader("Modul Keuangan, Aset, SDM & Kegiatan")
+st.set_page_config(page_title="Sistem Informasi Kelompok Bundaran Pancasila", layout="wide")
+st.title("🕌 Sistem Informasi Kelompok Bundaran Pancasila")
 
 menu = st.sidebar.selectbox("Pilih Modul", ["Dashboard", "Data SDM (Jemaah)", "Keuangan & Kas", "Aset & Inventaris", "Kegiatan & Absensi", "Unduh Laporan Excel"])
 
@@ -73,13 +72,12 @@ total_aset = df_aset['jumlah'].sum() if not df_aset.empty else 0
 # 1. MODUL DASHBOARD
 # ==========================================
 if menu == "Dashboard":
-    st.write("### Selamat Datang di Pusat Kendali Pengajian")
     col1, col2, col3 = st.columns(3)
     col1.metric(label="Total Jemaah Terdaftar", value=f"{len(df_jemaah)} Orang")
     col2.metric(label="Saldo Kas Saat Ini", value=f"Rp {saldo_total:,}")
     col3.metric(label="Total Unit Aset Kelompok", value=f"{total_aset} Barang")
     st.write("---")
-    st.write("#### 📈 Ringkasan Aktivitas Terbaru")
+    st.write("#### Aktivitas Terbaru")
     tab1, tab2 = st.tabs(["5 Transaksi Terakhir", "Agenda Terdekat"])
     with tab1:
         if not df_keuangan.empty:
@@ -101,7 +99,7 @@ elif menu == "Data SDM (Jemaah)":
         st.write("**Tambah Jemaah Baru**")
         nama = st.text_input("Nama Lengkap")
         kontak = st.text_input("Nomor WhatsApp/Kontak")
-        kelompok = st.selectbox("Asal Kelompok / Wilayah", ["Kelompok Bundaran Pancalia"])
+        kelompok = st.selectbox("Asal Kelompok / Wilayah", ["Kelompok Bundaran Pancasila"])
         submit = st.form_submit_button("Simpan Data Jemaah")
         if submit and nama:
             run_query("INSERT INTO jemaah (nama, kontak, kelompok) VALUES (%s, %s, %s)", (nama, kontak, kelompok))
@@ -110,7 +108,7 @@ elif menu == "Data SDM (Jemaah)":
 
     st.write("---")
     st.write("#### 🔍 Daftar Anggota Jemaah Aktif")
-    filter_kelompok = st.selectbox("Filter berdasarkan Kelompok:", ["Semua", "Kelompok Bundaran Pancalia"])
+    filter_kelompok = st.selectbox("Filter berdasarkan Kelompok:", ["Semua", "Kelompok Bundaran Pancasila"])
     if not df_jemaah.empty:
         display_df = df_jemaah if filter_kelompok == "Semua" else df_jemaah[df_jemaah['kelompok'] == filter_kelompok]
         st.dataframe(display_df[['id', 'nama', 'kontak', 'kelompok']], use_container_width=True)
