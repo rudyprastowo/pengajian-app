@@ -1,4 +1,6 @@
-streamlit
-pandas
-xlsxwriter
-psycopg2-binary
+   streamlit
+   pandas
+   xlsxwriter
+   psycopg2-binary
+   bcrypt
+   supabase
