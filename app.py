@@ -53,6 +53,13 @@ st.markdown("""
         color: white !important;
         border: none !important;
     }
+    /* Label "Pilih Modul" dan label lain di sidebar dibuat lebih jelas */
+    section[data-testid="stSidebar"] label p {
+        font-size: 1.05rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        letter-spacing: 0.2px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -199,7 +206,6 @@ st.markdown("""
     box-shadow: 0 6px 18px rgba(20, 83, 45, 0.25);
 ">
     <h1 style="color: white; margin: 0; font-size: 1.9rem;">🕌 Sistem Informasi Kelompok Bundaran Pancasila</h1>
-    <p style="color: #d9f2e6; margin: 6px 0 0 0; font-size: 0.95rem;">Modul Keuangan, Aset, SDM &amp; Kegiatan Kelompok</p>
 </div>
 """, unsafe_allow_html=True)
 
