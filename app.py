@@ -9,7 +9,53 @@ import io
 # ==========================================
 # KONFIGURASI HALAMAN (HARUS PALING ATAS)
 # ==========================================
-st.set_page_config(page_title="Sistem Informasi Kelompok Bundaran Pancasila", layout="wide")
+st.set_page_config(page_title="Sistem Informasi Kelompok Bundaran Pancasila", layout="wide", page_icon="🕌")
+
+# ==========================================
+# CUSTOM STYLING (TAMPILAN LEBIH MENARIK)
+# ==========================================
+st.markdown("""
+<style>
+    /* Kartu metrik dashboard */
+    div[data-testid="stMetric"] {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+        border: 1px solid #e6e9f0;
+        border-radius: 14px;
+        padding: 18px 16px;
+        box-shadow: 0 2px 8px rgba(20, 40, 80, 0.06);
+    }
+    div[data-testid="stMetric"] label {
+        font-weight: 600;
+        color: #5b6470;
+    }
+    div[data-testid="stMetricValue"] {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #14532d;
+    }
+    /* Tab styling */
+    button[data-baseweb="tab"] {
+        font-weight: 600;
+    }
+    /* Sidebar */
+    section[data-testid="stSidebar"] {
+        background: #0f4c3a;
+    }
+    section[data-testid="stSidebar"] * {
+        color: #f2f7f4 !important;
+    }
+    section[data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] > div {
+        background-color: #ffffff !important;
+        color: #14532d !important;
+    }
+    section[data-testid="stSidebar"] button {
+        background-color: #b91c1c !important;
+        color: white !important;
+        border: none !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 
 # ==========================================
 # KONEKSI DATABASE (SUPABASE / POSTGRESQL)
@@ -144,7 +190,18 @@ st.sidebar.write("---")
 # ==========================================
 # KONFIGURASI HALAMAN UTAMA
 # ==========================================
-st.title("🕌 Sistem Informasi Kelompok Bundaran Pancasila")
+st.markdown("""
+<div style="
+    background: linear-gradient(120deg, #14532d 0%, #0f4c3a 60%, #b45309 130%);
+    padding: 28px 32px;
+    border-radius: 18px;
+    margin-bottom: 22px;
+    box-shadow: 0 6px 18px rgba(20, 83, 45, 0.25);
+">
+    <h1 style="color: white; margin: 0; font-size: 1.9rem;">🕌 Sistem Informasi Kelompok Bundaran Pancasila</h1>
+    <p style="color: #d9f2e6; margin: 6px 0 0 0; font-size: 0.95rem;">Modul Keuangan, Aset, SDM &amp; Kegiatan Kelompok</p>
+</div>
+""", unsafe_allow_html=True)
 
 menu_options = ["Dashboard", "Data SDM (Jemaah)", "Keuangan & Kas", "Aset & Inventaris", "Kegiatan & Absensi", "Dokumen", "Unduh Laporan Excel"]
 if st.session_state['role'] == 'admin':
@@ -171,21 +228,28 @@ total_aset = df_aset['jumlah'].sum() if not df_aset.empty else 0
 # 1. MODUL DASHBOARD
 # ==========================================
 if menu == "Dashboard":
+    st.markdown(f"""
+    <p style="color:#6b7280; font-size:0.95rem; margin-top:-10px; margin-bottom:18px;">
+        Selamat datang kembali, <b>{st.session_state.get('nama_lengkap') or st.session_state['username']}</b> 👋
+    </p>
+    """, unsafe_allow_html=True)
+
     col1, col2, col3 = st.columns(3)
-    col1.metric(label="Total Jemaah Terdaftar", value=f"{len(df_jemaah)} Orang")
-    col2.metric(label="Saldo Kas Saat Ini", value=f"Rp {saldo_total:,}")
-    col3.metric(label="Total Unit Aset Kelompok", value=f"{total_aset} Barang")
-    st.write("---")
-    st.write("#### Aktivitas Terbaru")
-    tab1, tab2 = st.tabs(["5 Transaksi Terakhir", "Agenda Terdekat"])
+    col1.metric(label="👥 Total Jemaah Terdaftar", value=f"{len(df_jemaah)} Orang")
+    col2.metric(label="💰 Saldo Kas Saat Ini", value=f"Rp {saldo_total:,}")
+    col3.metric(label="📦 Total Unit Aset Kelompok", value=f"{total_aset} Barang")
+
+    st.write("")
+    st.markdown("#### 📈 Aktivitas Terbaru")
+    tab1, tab2 = st.tabs(["💵 5 Transaksi Terakhir", "🗓️ Agenda Terdekat"])
     with tab1:
         if not df_keuangan.empty:
-            st.dataframe(df_keuangan.tail(5), use_container_width=True)
+            st.dataframe(df_keuangan.tail(5), use_container_width=True, hide_index=True)
         else:
             st.info("Belum ada transaksi keuangan yang dicatat.")
     with tab2:
         if not df_kegiatan.empty:
-            st.dataframe(df_kegiatan.tail(5), use_container_width=True)
+            st.dataframe(df_kegiatan.tail(5), use_container_width=True, hide_index=True)
         else:
             st.info("Belum ada agenda kegiatan yang dijadwalkan.")
 
